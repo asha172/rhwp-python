@@ -139,6 +139,25 @@ class Document:
         """모든 문단의 텍스트 리스트 (빈 문단 포함, ``len == paragraph_count``)."""
         return self._inner.paragraphs()
 
+    def paragraph_pages(self) -> list[int]:
+        """문단별 시작 쪽 번호 (전역 1-based).
+
+        :meth:`paragraphs` 와 **같은 평탄화 순서·같은 길이** 다 (빈 문단 포함,
+        ``len == paragraph_count``). 빈 문단을 필터하는 :meth:`extract_text` 와는
+        인덱스가 맞지 않는다.
+
+        문단이 여러 쪽에 걸치면 **첫 쪽**을 반환한다. 조판에 나타나지 않는 문단
+        (구역 끝의 빈 문단 등)은 직전 문단의 쪽을 승계한다 (문서 선두는 1쪽).
+
+        반환값은 렌더 쪽 **순번** (전역 1-based)이다 — :meth:`render_svg` 등
+        0-based ``page`` 인자로 쓸 때는 1을 빼서 넘긴다. 쪽 번호 새로 매기기
+        (NewNumber)가 반영된 **표시용** 쪽 번호와는 다를 수 있다.
+
+        RAG 인용처럼 "이 문단이 원문 몇 쪽인가" 가 필요한 소비자를 위한 API 다 —
+        렌더된 PDF 에 텍스트를 재대조하지 않고 조판 결과에서 직접 읽는다.
+        """
+        return self._inner.paragraph_pages()
+
     # * Document IR
 
     def to_ir(self) -> "HwpDocument":
