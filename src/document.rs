@@ -311,7 +311,7 @@ impl PyDocument {
         Ok(self
             .inner
             .get_bin_data((bin_data_id - 1) as usize)
-            .map(|bytes| PyBytes::new(py, bytes)))
+            .map(|bytes| PyBytes::new(py, &bytes)))
     }
 
     /// IR 을 JSON 문자열로 반환한다. `to_ir()` 캐시를 공유한다.
