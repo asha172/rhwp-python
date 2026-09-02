@@ -1,4 +1,9 @@
 [submodule "external/rhwp"]
 	path = external/rhwp
 	url = https://github.com/asha172/rhwp.git
-	branch = main
+	# ★ 우리 포크의 작업 브랜치. 업스트림(edwardkim/rhwp)에서 물려받은 값이 `main` 이었는데,
+	#   url 을 asha172/rhwp 로 재배선(754a315)하면서 의미가 뒤집혔다 — 그쪽 main 은 v0.8.3 을
+	#   1커밋으로 압축한 스냅샷이고 우리 작업과 **공통 조상이 없다**. 그대로 두면
+	#   `git submodule update --remote` 가 우리 수정 8건이 빠진 트리로 갈아치우는데,
+	#   소스가 멀쩡해서 컴파일도 되고 빌드도 "성공"한다 — 조용히 틀린 산출물이 나온다.
+	branch = feat/pp-0719
