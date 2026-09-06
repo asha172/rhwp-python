@@ -57,7 +57,12 @@ jobs:
       - uses: PyO3/maturin-action@v1
         with:
           target: ${{ matrix.target }}
-          manylinux: auto
+          # ★manylinux2014(CentOS 7) 컨테이너에서 만든 휠은 리눅스에서 import 가 죽는다(2026-09-06 실측, 우분투 22.04):
+          #   `undefined symbol: FT_Palette_Data_Get`. native-skia 가 쓰는 rust-skia 미리빌드 바이너리는 FreeType ≥2.10
+          #   API(FT_Palette_*, FT_Get_Color_Glyph_Layer, FT_Get_Var_Axis_Flags)를 시스템 FreeType 에서 찾는데, CentOS 7 의
+          #   freetype-devel 은 2.8 이고 maturin 이 그 2.8 을 휠 안에 묶어 버린다(링크 단계는 공유객체라 미정의를 허용).
+          #   manylinux_2_34(AlmaLinux 9) 는 FreeType 2.10.4·fontconfig 2.14 라 네 심볼이 모두 있다. 실행 환경 glibc ≥2.34.
+          manylinux: 2_34
           command: build
           args: --release --out dist
           before-script-linux: |
